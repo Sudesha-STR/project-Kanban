@@ -10,9 +10,6 @@ import add from '../../Assets/Images/add.svg';
 import dot from '../../Assets/Images/dot.svg';
 
 export default function List(props) {
-  // Use local variable for card count
-  let cardCount = 0;
-
   return (
     <div className="list-container">
       <div className="list-header">
@@ -41,34 +38,23 @@ export default function List(props) {
           <div className="list-title">
             {props.listTitle}
           </div>
-          <div className="list-sum">{cardCount}</div>
+          {/* Display the ticket count passed from props */}
+          <div className="list-sum">{props.ticketCount}</div>
         </div>
         <div className="list-header-right">
           <div className="list-add-item">
-          
-          <img src={add} alt="add" width="18" height="18" viewBox="0 0 24 24"/>
-            
+            <img src={add} alt="add" width="18" height="18" viewBox="0 0 24 24"/>
           </div>
           <div className="list-option-item">
-          <img src={dot} alt="add" width="18" height="18" viewBox="0 0 24 24"/>
+            <img src={dot} alt="options" width="18" height="18" viewBox="0 0 24 24"/>
           </div>
         </div>
       </div>
 
       <div className="list-card-items">
-        {props.ticketDetails.map(ticket => {
-          // Determine if the ticket matches the current list title based on group value
-          const matches =
-            (props.groupValue === 'status' && ticket.status === props.listTitle) ||
-            (props.groupValue === 'priority' && ticket.priority === parseInt(props.listTitle, 10)) ||
-            (props.groupValue === 'user' && ticket.userObj?.name === props.listTitle);
-
-          if (matches) {
-            cardCount++;
-            return <Card key={ticket.id} cardDetails={ticket} />;
-          }
-          return null;
-        })}
+        {props.ticketDetails.map(ticket => (
+          <Card key={ticket.id} cardDetails={ticket} />
+        ))}
       </div>
     </div>
   );

@@ -84,52 +84,67 @@ function App() {
         handleOrderValue={handleOrderValue}
       />
       <section className="board-details">
-        <div className="board-details-list">
-          {{
-            'status': (
-              <>
-                {statusList.map(listItem => (
-                  <List
-                    key={listItem}
-                    groupValue='status'
-                    orderValue={orderValue}
-                    listTitle={listItem}
-                    ticketDetails={ticketDetails.filter(ticket => ticket.status === listItem)} // Filter tickets by status
-                  />
-                ))}
-              </>
-            ),
-            'user': (
-              <>
-                {userList.map(user => (
-                  <List
-                    key={user}
-                    groupValue='user'
-                    orderValue={orderValue}
-                    listTitle={user}
-                    ticketDetails={ticketDetails.filter(ticket => ticket.userObj?.name === user)} // Filter tickets by user
-                  />
-                ))}
-              </>
-            ),
-            'priority': (
-              <>
-                {priorityList.map(priority => (
-                  <List
-                    key={priority.priority}
-                    groupValue='priority'
-                    orderValue={orderValue}
-                    listTitle={priority.name}
-                    ticketDetails={ticketDetails.filter(ticket => {
-                      // Filter tickets by priority
-                      return ticket.priority === priority.priority || (priority.priority === 0 && !ticket.priority);
-                    })}
-                  />
-                ))}
-              </>
-            )
-          }[groupValue]}
-        </div>
+      <div className="board-details-list">
+  {{
+    'status': (
+      <>
+        {statusList.map(listItem => {
+          const filteredTickets = ticketDetails.filter(ticket => ticket.status === listItem);
+          return (
+            <List
+              key={listItem}
+              groupValue="status"
+              orderValue={orderValue}
+              listTitle={listItem}
+              ticketDetails={filteredTickets} // Filter tickets by status
+              ticketCount={filteredTickets.length} // Pass the count of tickets
+            />
+          );
+        })}
+      </>
+    ),
+    'user': (
+      <>
+        {userList.map(user => {
+          const filteredTickets = ticketDetails.filter(ticket => ticket.userObj?.name === user);
+          return (
+            <List
+              key={user}
+              groupValue="user"
+              orderValue={orderValue}
+              listTitle={user}
+              ticketDetails={filteredTickets} // Filter tickets by user
+              ticketCount={filteredTickets.length} // Pass the count of tickets
+            />
+          );
+        })}
+      </>
+    ),
+    'priority': (
+      <>
+        {priorityList.map(priority => {
+          const filteredTickets = ticketDetails.filter(ticket => {
+            // Filter tickets by priority and handle 'No priority' case
+            if (priority.priority === 0) {
+              return ticket.priority === 0 || ticket.priority === null || ticket.priority === undefined;
+            }
+            return ticket.priority === priority.priority;
+          });
+          return (
+            <List
+              key={priority.priority}
+              groupValue="priority"
+              orderValue={orderValue}
+              listTitle={priority.name}
+              ticketDetails={filteredTickets} // Filter tickets by priority
+              ticketCount={filteredTickets.length} // Pass the count of tickets
+            />
+          );
+        })}
+      </>
+    )
+  }[groupValue]}
+</div>
       </section>
     </>
   );
