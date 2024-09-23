@@ -120,7 +120,10 @@ function App() {
                     groupValue='priority'
                     orderValue={orderValue}
                     listTitle={priority.name}
-                    ticketDetails={ticketDetails.filter(ticket => ticket.priority === priority.priority)} // Filter tickets by priority
+                    ticketDetails={ticketDetails.filter(ticket => {
+                      // Filter tickets by priority
+                      return ticket.priority === priority.priority || (priority.priority === 0 && !ticket.priority);
+                    })}
                   />
                 ))}
               </>
